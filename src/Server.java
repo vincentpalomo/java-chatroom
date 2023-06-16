@@ -26,13 +26,16 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Client connected: " + clientSocket);
 
+                // add client socket to the client list *ArrayList
                 clients.add(clientSocket);
+
+                // create a new thread to handle client communication
                 Thread thread = new Thread(new ClientHandler(clientSocket));
                 thread.start();
             }
         } catch (IOException e) {
+            // handle errors that occur during server socket creation
             System.out.println("Error creating server socket: " + e.getMessage());
-            throw new RuntimeException(e);
         }
     }
 
@@ -45,7 +48,11 @@ public class Server {
         }
         @Override
         public void run() {
+            // this method is executed when the thread starts running
+            // handles communication with a specific client
             System.out.println("Test");
+
+            // implement the logic to receive and send message to the chatroom
         }
     }
 }
