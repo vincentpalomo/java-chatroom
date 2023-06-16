@@ -38,6 +38,14 @@ public class Chatroom {
         // frame layout
         frame.getContentPane().add(BorderLayout.CENTER, new JScrollPane(chatArea));
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
+
+        // set font of the chat area
+        chatArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+        // set up frame GUI
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600,500);
+        frame.setVisible(true);
     }
     public static void main(String[] args) {
         System.out.printf("hello world");
