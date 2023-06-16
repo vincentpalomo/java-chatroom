@@ -18,6 +18,9 @@ public class Chatroom {
     public Chatroom(String username) {
         this.username = username;
         // open GUI
+        // need to implement server class
+        // connect to server
+        // figure out why GUI is not showing up
         initializeGUI();
     }
 
