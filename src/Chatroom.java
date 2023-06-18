@@ -117,7 +117,7 @@ public class Chatroom {
     }
 
     public static void main(String[] args) {
-        System.out.printf("hello world");
+        System.out.printf("chatroom is online");
         String username = "jinx";
         new Chatroom(username);
     }
