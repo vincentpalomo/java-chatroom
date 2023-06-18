@@ -20,12 +20,15 @@ public class Chatroom {
 
     public Chatroom(String username) {
         this.username = username;
-        // open GUI
-        // need to implement server class
-        // connect to server
-        // figure out why GUI is not showing up
+
+        // connect to the server
         connectToServer();
+
+        // initialize gui
         initializeGUI();
+
+        // start a new thread to handle incoming messages
+        new Thread(new IncomingMessageHandler()).start();
     }
 
     private void initializeGUI() {
@@ -85,8 +88,13 @@ public class Chatroom {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            // get message from the message field
             String message = messageField.getText();
+
+            // send the message to server
             out.println(message);
+
+            // clear the message field
             messageField.setText("");
         }
     }
@@ -99,6 +107,7 @@ public class Chatroom {
                 while (true) {
                     // sends messages to the next line after submission
                     String message = in.nextLine();
+                    // display the recieved message in the chat area
                     chatArea.append(message + "\n");
                 }
             } catch (Exception e) {
