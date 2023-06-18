@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -23,6 +24,7 @@ public class Chatroom {
         // need to implement server class
         // connect to server
         // figure out why GUI is not showing up
+        connectToServer();
         initializeGUI();
     }
 
@@ -59,6 +61,23 @@ public class Chatroom {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,500);
         frame.setVisible(true);
+    }
+
+    // method to connect to server
+    private void connectToServer(){
+        try {
+            // establish connection to server
+            socket = new Socket("localhost", 3000);
+
+            // set up input and output stream for communication with server
+            in = new Scanner(socket.getInputStream());
+            out = new PrintWriter(socket.getOutputStream(), true);
+
+            // send username to the server
+            out.println(username);
+        } catch (IOException e) {
+            chatArea.append("Error connecting to server: " + e.getMessage() + "\n");
+        }
     }
 
     // Send Button Action Listener
