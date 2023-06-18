@@ -1,4 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -39,6 +42,19 @@ public class Server {
         }
     }
 
+    // broadcast messages
+    private static void broadcast(String message) {
+        for (Socket client : clients) {
+            try {
+                // print messages out to the chatroom
+                PrintWriter clientOut = new PrintWriter(client.getOutputStream(), true);
+                clientOut.println(message);
+            } catch (IOException e) {
+                System.out.println("Error broadcasting message to client: " + e.getMessage());
+            }
+        }
+    }
+
     // client handler
     private static class ClientHandler implements Runnable {
         private Socket clientSocket;
@@ -50,9 +66,32 @@ public class Server {
         public void run() {
             // this method is executed when the thread starts running
             // handles communication with a specific client
-            System.out.println("Test");
-
             // implement the logic to receive and send message to the chatroom
+            try {
+                // set up input and output streams for communication with the client
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+
+                // read the username sent by the client
+                String username = in.readLine();
+                System.out.println("Client username: " + username);
+
+                // continuously read messages from the client and process them
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    // perform any necessary processing on the received messages
+                    // broadcast the message to all connected clients
+                    System.out.println(username + ": " + inputLine);
+                    broadcast(username + ": " + inputLine);
+                }
+
+                // logic for when a user leaves the chatroom
+                clientSocket.close();
+                clients.remove(clientSocket);
+                broadcast(username + " has left the chat");
+            } catch (IOException e) {
+                System.out.println("Error handling client: " + e.getMessage());
+            }
         }
     }
 }
